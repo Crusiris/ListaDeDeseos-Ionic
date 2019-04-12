@@ -3,7 +3,6 @@ import { DeseosService } from "../../services/deseos.service";
 import { ActivatedRoute } from "@angular/router";
 import { Lista } from "../../models/lista.model";
 import { ListaItem } from "../../models/lista-item.model";
-import { CONNREFUSED } from "dns";
 
 @Component({
   selector: "app-agregar",
@@ -50,5 +49,10 @@ export class AgregarPage implements OnInit {
 
     this.deseosService.guardarStorage();
     console.log(this.deseosService.listas);
+  }
+
+  borrar(i: number) {
+    this.lista.items.splice(i, 1);
+    this.deseosService.guardarStorage();
   }
 }
