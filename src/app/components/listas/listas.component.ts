@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import { DeseosService } from "../../services/deseos.service";
 import { Lista } from "../../models/lista.model";
 import { Router } from "@angular/router";
+import { AlertController, IonList } from "@ionic/angular";
 
 @Component({
   selector: "app-listas",
@@ -9,9 +10,14 @@ import { Router } from "@angular/router";
   styleUrls: ["./listas.component.scss"]
 })
 export class ListasComponent implements OnInit {
+  @ViewChild(IonList) lista: IonList;
   @Input() terminada = true;
 
-  constructor(public deseosService: DeseosService, private router: Router) {}
+  constructor(
+    public deseosService: DeseosService,
+    private router: Router,
+    private alertCtrl: AlertController
+  ) {}
 
   ngOnInit() {}
 
@@ -25,5 +31,47 @@ export class ListasComponent implements OnInit {
 
   borrarLista(lista: Lista) {
     this.deseosService.borrarLista(lista);
+  }
+
+  async editarLista(lista: Lista) {
+    const alert = await this.alertCtrl.create({
+      header: "EditarLista",
+      inputs: [
+        {
+          name: "titulo",
+          type: "text",
+          value: lista.titulo,
+          placeholder: "Nombre de lista"
+        }
+      ],
+      buttons: [
+        {
+          text: "Cancelar",
+          role: "cancel",
+          handler: () => {
+            console.log("Cancelar");
+            this.lista.closeSlidingItems();
+          }
+        },
+        {
+          text: "Actualizar",
+          handler: data => {
+            console.log(data);
+
+            if (data.titulo.length === 0) {
+              return;
+            }
+
+            //Sino tengo que crear la lista, la cual debe estar centralizada
+
+            lista.titulo = data.titulo;
+            this.deseosService.guardarStorage();
+            this.lista.closeSlidingItems();
+          }
+        }
+      ]
+    });
+
+    alert.present();
   }
 }

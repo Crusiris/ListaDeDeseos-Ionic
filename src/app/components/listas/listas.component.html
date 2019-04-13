@@ -7,6 +7,17 @@
             <ion-note slot="end" color="tertiary"> {{ lista.items.length }} Items </ion-note>
         </ion-item>
 
+        <ion-item-options side="start">
+
+            <ion-item-option (click)="editarLista (lista)">
+                <ion-icon name="create" slot="icon-only"></ion-icon>
+            </ion-item-option>
+
+        </ion-item-options>
+
+
+
+
         <ion-item-options side="end">
 
             <ion-item-option color="danger" (click)="borrarLista ( lista )"> Borrar</ion-item-option>
